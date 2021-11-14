@@ -34,15 +34,25 @@ function originalPrompt() {
             ]
         })
         .then(function (response) {
-            switch (response.selection) {
+            console.log(response);
+            switch (response.options) {
                 case "View all Employees":
-
+                    viewAllEmployees();
                     break;
                 case "View all Departments":
-
+                    viewAllDepartments();
                     break;
                 case "View all Roles":
-
+                    viewAllRoles();
+                    break;
+                case "Add a role":
+                    addArole();
+                    break;
+                case "Add a department":
+                    addADepartment();
+                    break;
+                case "Add an employee":
+                    addAEmployee();
                     break;
                 default:
                     dbConnection.end();
@@ -50,3 +60,40 @@ function originalPrompt() {
 
         });
 };
+
+function viewAllEmployees() {
+    const query = "SELECT * FROM employees"
+
+    dbConnection.query(query, function (err, res) {
+        if (err) throw err;
+        console.table(res)
+
+        originalPrompt();
+    }
+    );
+};
+
+function viewAllDepartments() {
+    const query = "SELECT * FROM departments"
+
+    dbConnection.query(query, function (err, res) {
+        if (err) throw err;
+        console.table(res)
+
+        originalPrompt();
+    }
+    );
+};
+
+function viewAllRoles() {
+    const query = "SELECT * FROM roles"
+
+    dbConnection.query(query, function (err, res) {
+        if (err) throw err;
+        console.table(res)
+
+        originalPrompt();
+    }
+    );
+};
+
