@@ -14,4 +14,39 @@ const dbConnection = mysql.createConnection(
 );
 dbConnection.connect(function (err) {
     if (err) throw err;
+    originalPrompt();
 });
+
+function originalPrompt() {
+    inquirer
+        .prompt({
+            name: "options",
+            type: "list",
+            message: "Please select an option",
+            choices: [
+                "View all Employees",
+                "View all Departments",
+                "View all Roles",
+                "Add a employee",
+                "Add a department",
+                "Add a role",
+                "Exit"
+            ]
+        })
+        .then(function (response) {
+            switch (response.selection) {
+                case "View all Employees":
+
+                    break;
+                case "View all Departments":
+
+                    break;
+                case "View all Roles":
+
+                    break;
+                default:
+                    dbConnection.end();
+            }
+
+        });
+};
