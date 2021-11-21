@@ -60,7 +60,14 @@ function originalPrompt() {
 
         });
 };
+/*
+I still need to do joins to make sure i add the info from the other
+tables into the search the person looks for..
 
+add the ADD functions into the prompt 
+
+submit the assignment
+*/
 function viewAllEmployees() {
     const query = "SELECT * FROM employees"
 
@@ -97,3 +104,61 @@ function viewAllRoles() {
     );
 };
 
+function addADepartment() {
+    inquirer.prompt([
+        {
+            name: 'addingDepartment',
+            type: 'input',
+            message: 'What is the name of the new department?'
+
+        }
+    ])
+        .then((answer) => {
+            const query = 'INSERT INTO departments (name) VALUES (?)'
+
+            dbConnection.query(query, answer.addingDepartment, (err, res) => {
+                if (err) throw err;
+                console.table(res)
+
+                originalPrompt();
+            }
+            );
+        })
+};
+
+function addAEmployee() {
+    inquirer.prompt([
+        {
+            name: 'employeeFirstName',
+            type: 'input',
+            message: 'What is the first name of the new employee?'
+        },
+        {
+            name: "employeeLastName",
+            type: 'input',
+            message: "What is the last name of the new employee?"
+
+        }
+    ])
+    const query = "INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)"
+
+    dbConnection.query(query, (err, res) => {
+        if (err) throw err;
+        console.table(res)
+
+        originalPrompt();
+    }
+    );
+};
+
+function addArole() {
+    const query = "SELECT * FROM roles"
+
+    dbConnection.query(query, function (err, res) {
+        if (err) throw err;
+        console.table(res)
+
+        originalPrompt();
+    }
+    );
+};
