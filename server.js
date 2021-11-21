@@ -51,7 +51,7 @@ function originalPrompt() {
                 case "Add a department":
                     addADepartment();
                     break;
-                case "Add an employee":
+                case "Add a employee":
                     addAEmployee();
                     break;
                 default:
@@ -138,27 +138,66 @@ function addAEmployee() {
             type: 'input',
             message: "What is the last name of the new employee?"
 
+        },
+        {
+            name: 'employeeRoleId',
+            type: 'input',
+            message: 'What is the role id of the new employee?'
+        },
+        {
+            name: 'employeeManagerId',
+            type: 'input',
+            message: 'What is the manager id of the new employee?'
         }
     ])
-    const query = "INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)"
+        .then(answer => {
+            console.log("this is your answer for employeeManagerID" + answer.employeeManagerId);
+            // let eFN = answer.employeeFirstName;
+            // let eLN = answer.employeeLastName;
+            // let eRID = answer.employeeRoleId;
+            // let eMID = answer.employeeManagerId;
+            // let theNewEmployee = 'INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)', [eFN, eLN, eRID, eMID];
 
-    dbConnection.query(query, (err, res) => {
-        if (err) throw err;
-        console.table(res)
+            dbConnection.query('INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)', [answer.employeeFirstName, answer.employeeLastName, answer.employeeRoleId, answer.employeeManagerId], (err, res) => {
+                if (err) throw err;
+                console.table(res)
 
-        originalPrompt();
-    }
-    );
+                originalPrompt();
+            }
+            );
+        })
 };
 
 function addArole() {
-    const query = "SELECT * FROM roles"
+    inquirer.prompt([
 
-    dbConnection.query(query, function (err, res) {
-        if (err) throw err;
-        console.table(res)
+        {
+            name: 'employeeRole',
+            type: 'input',
+            message: 'What is the title for the role you would like to add?'
+        },
+        {
+            name: 'roleSalary',
+            type: 'input',
+            message: 'What is the salary of this new role?'
+        },
+        {
+            name: 'roleDepartmentId',
+            type: 'input',
+            message: 'What is the department ID for this new role?'
 
-        originalPrompt();
-    }
-    );
+        }
+    ])
+        .then(answer => {
+            dbConnection.query('INSERT INTO roles (title, salary, department_id) VALUES (?,?,?)', [answer.employeeRole, answer.roleSalary, answer.roleDepartmentId], function (err, res) {
+                if (err) throw err;
+                console.table(res)
+
+                originalPrompt();
+            }
+            );
+        })
+
+
+
 };
